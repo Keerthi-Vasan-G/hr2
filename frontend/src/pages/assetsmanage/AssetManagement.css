@@ -1,0 +1,133 @@
+/* General page padding for larger screens */
+.asset-management-page {
+  padding: 20px;
+  margin-left: 80px; /* Adjust based on sidebar width */
+}
+
+/* Table header style */
+.ant-table-thead > tr > th {
+  background-color: #f0f2f5;
+  font-weight: bold;
+}
+/* Input field styles */
+
+/* Header and search bar responsiveness */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.search-bar {
+  width: 250px;
+}
+
+/* Responsive table for smaller screens (Tablets and small laptops) */
+@media (max-width: 768px) {
+  .asset-management-page {
+    padding: 10px;
+    margin-left: 0px; /* Adjust based on sidebar width */
+
+  }
+
+  /* Make the table horizontally scrollable */
+  .ant-table-wrapper {
+    overflow-x: auto;
+    
+  }
+
+  /* Adjust modal width for tablets and small screens */
+  .ant-modal {
+    width: 90% !important;
+  }
+  .search-bar {
+    width: 320px;
+  }
+  
+}
+
+/* Extra responsiveness for mobile screens (480px and below) */
+@media (max-width: 480px) {
+  .asset-management-page {
+    padding: 5px;
+    margin-left: 0px; /* Adjust based on sidebar width */
+
+  }
+
+  .header {
+    align-items: center;
+  }
+
+  /* Modal for very small screens */
+  .ant-modal {
+    width: 95% !important;
+  }
+
+  /* Make table scrollable on smaller screens */
+  .ant-table-wrapper {
+    overflow-x: scroll;
+  }
+
+  /* Font size adjustments for headers and buttons */
+  .header-title {
+    font-size: 18px; /* Adjusted font size for mobile */
+  }
+
+  .ant-btn {
+    font-size: 12px;
+    padding: 6px 10px; /* Reduced button padding for smaller screens */
+  }
+
+  .ant-form-item-label {
+    font-size: 12px;
+  }
+}
+
+/* Specific adjustments for mobile screens 320px to 480px */
+@media (max-width: 320px) {
+  .asset-management-page {
+    padding: 5px;
+    margin-left: 0px; /* Adjust based on sidebar width */
+
+  }
+  .search-bar {
+    width: 320px;
+  }
+  /* Table: Make the table fit within small screens by scrolling horizontally */
+  .ant-table-wrapper {
+    overflow-x: scroll;
+    font-size: 10px; /* Reduce font size for readability */
+  }
+
+  /* Adjust table cell padding and font sizes */
+  .ant-table-thead > tr > th, 
+  .ant-table-tbody > tr > td {
+    padding: 4px; /* Reduced padding for table cells */
+    font-size: 10px; /* Smaller font size for mobile */
+  }
+
+  .ant-btn {
+    font-size: 10px; /* Smaller button font size */
+    padding: 4px 8px; /* Smaller button padding */
+  }
+
+  /* Adjust modal for smaller devices */
+  .ant-modal {
+    width: 95% !important; /* Ensure modals fit within small mobile screens */
+  }
+
+  /* Adjust form item labels and input fields for small screens */
+  .ant-form-item-label {
+    font-size: 10px;
+  }
+
+  .ant-form-item-control-input {
+    font-size: 12px; /* Adjust font size for form input */
+  }
+
+  /* Adjust modal button spacing for small screens */
+  .modal-button {
+    font-size: 10px; /* Smaller button font size */
+    padding: 4px 8px; /* Adjust button padding */
+  }
+}

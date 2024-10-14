@@ -1,0 +1,23 @@
+.salary-management-page {
+    padding: 20px;
+  }
+  
+  .salary-management-page .header-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .salary-management-page .ant-table {
+    margin-top: 20px;
+  }
+  
+  .salary-management-page .ant-modal {
+    max-width: 800px;
+  }
+  
+  @media (max-width: 768px) {
+    .salary-management-page .ant-modal {
+      width: 100%;
+    }
+  }
+  

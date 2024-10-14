@@ -1,0 +1,134 @@
+/* General Layout */
+.main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .header {
+    background-color: #ffffff;
+    padding: 16px;
+  }
+  
+  .header-title {
+    margin: 0;
+    font-size: 24px; /* Adjust font size */
+  }
+  
+  .content {
+    padding: 16px;
+    background-color: #f5f5f5;
+  }
+  
+  /* Responsive adjustments for different screens */
+  @media (max-width: 768px) {
+    .content {
+      padding: 8px;
+    }
+  
+    /* Stack columns on smaller screens */
+    .ant-row {
+      flex-direction: column;
+    }
+  
+    .ant-col {
+      margin-bottom: 16px; /* Add spacing between stacked columns */
+    }
+  
+    /* Modal responsiveness */
+    .ant-modal {
+      width: 95% !important;
+      max-width: 95% !important;
+    }
+  
+    /* Buttons and text adjustments */
+    .ant-btn {
+      width: 100%; /* Make buttons full width on small screens */
+      margin-bottom: 10px;
+    }
+  
+    .header-title {
+      font-size: 20px;
+    }
+  
+    .ant-input,
+    .ant-select {
+      width: 100%; /* Full width inputs and selects */
+    }
+  
+    /* Adjust table or list responsiveness */
+    .ant-list-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .ant-list-item-meta {
+      margin-bottom: 8px;
+    }
+  }
+  
+  /* Extra small devices (max-width: 480px) */
+  @media (max-width: 480px) {
+    .header-title {
+      font-size: 18px;
+    }
+  
+    /* Reduce modal padding */
+    .ant-modal {
+      width: 100% !important;
+      padding: 8px !important;
+    }
+  
+    /* Make cards and steps stack properly */
+    .ant-card,
+    .ant-steps-item {
+      width: 100%; /* Full width on mobile */
+      margin-bottom: 16px;
+    }
+  
+    /* Adjust button and input sizes */
+    .ant-btn {
+      font-size: 14px;
+      padding: 10px;
+    }
+  
+    .ant-input {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .ant-form-item-label > label {
+      font-size: 14px;
+    }
+  
+    /* Adjust table or list items for better readability */
+    .ant-list-item {
+      font-size: 14px;
+    }
+  }
+  
+  /* For very small screens (320px and below) */
+  @media (max-width: 320px) {
+    .header-title {
+      font-size: 16px;
+    }
+  
+    .ant-btn {
+      font-size: 12px;
+      padding: 8px;
+    }
+  
+    .ant-input {
+      font-size: 12px;
+      padding: 6px;
+    }
+  
+    .ant-card {
+      padding: 8px;
+    }
+  
+    .ant-list-item {
+      font-size: 12px;
+    }
+  }
+  

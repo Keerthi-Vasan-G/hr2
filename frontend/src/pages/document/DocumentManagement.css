@@ -1,0 +1,187 @@
+/* General container styling */
+.document-management-container {
+  max-width: 100vw; /* Full width for mobile responsiveness */
+  margin: 0 auto; /* Center the container */
+  padding: 20px;
+  background-color: #ffffff; /* Light background color */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Heading styles */
+.header-title {
+  font-size: 2rem;
+  color: #007bff; /* Primary color for the heading */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Button styles */
+.button {
+  display: inline-block;
+  margin: 10px 0;
+  padding: 10px 20px;
+  background-color: #007bff; /* Primary button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Input field styles */
+input[type="search"] {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Table styles */
+.table-responsive {
+  width: 100%; /* Full width for table */
+  overflow-x: auto; /* Enable horizontal scrolling for smaller screens */
+}
+
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+.table th {
+  background-color: #007bff; /* Header background */
+  color: white; /* Header text color */
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1; /* Highlight rows on hover */
+}
+
+/* Modal styling */
+.modal {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.text-primary {
+  color: #007bff; /* Primary text color */
+}
+
+/* Responsive adjustments for tablet and mobile screens */
+@media (max-width: 1024px) {
+  .document-management-container {
+    padding: 15px; /* Less padding on smaller screens */
+  }
+
+  .table th, .table td {
+    padding: 10px; /* Reduced padding for table cells */
+  }
+
+  .ant-btn {
+    margin-bottom: 10px;
+  }
+
+  .ant-modal {
+    width: 90% !important;
+    max-width: 90% !important;
+    margin: 0 auto;
+  }
+
+  .table-responsive {
+    overflow-x: auto; /* Enable horizontal scrolling */
+  }
+
+  .ant-input {
+    width: 100%; /* Make input fields full width */
+  }
+}
+
+@media (max-width: 768px) {
+  .header-title {
+    font-size: 1.75rem; /* Slightly smaller heading */
+  }
+
+  .document-management-container {
+    padding: 10px; /* Reduced padding for smaller screens */
+  }
+
+  .table th, .table td {
+    padding: 8px; /* Further reduced padding for table cells */
+  }
+
+  .table-responsive {
+    overflow-x: scroll; /* Enable horizontal scrolling */
+  }
+}
+
+@media (max-width: 480px) {
+  .header-title {
+    font-size: 1.5rem; /* Even smaller heading for mobile */
+  }
+
+  .document-management-container {
+    padding: 10px; /* Reduced padding for smaller mobile screens */
+  }
+
+  .table th, .table td {
+    padding: 6px; /* Smaller padding for table cells */
+    font-size: 12px; /* Smaller font size for readability */
+  }
+
+  .table-responsive {
+    overflow-x: scroll; /* Enable horizontal scrolling */
+  }
+
+  .ant-modal {
+    width: 95% !important; /* Ensure modal fits within mobile screens */
+    padding: 10px;
+  }
+
+  .ant-input {
+    width: 100%; /* Make input fields full width */
+  }
+
+  .modal-button {
+    font-size: 12px; /* Smaller font size for modal buttons */
+    padding: 6px 10px; /* Adjusted padding */
+  }
+}
+
+@media (max-width: 320px) {
+  .document-management-container {
+    padding: 8px;
+    width: 250px;
+  }
+  .ant-btn {
+    margin-left: 20px;
+  }
+  .table th, .table td {
+    padding: 6px; /* Smaller table cell padding */
+    font-size: 10px; /* Smaller font for table content */
+  }
+
+  .ant-modal {
+    width: 100% !important; /* Ensure full width for very small screens */
+    padding: 8px; /* Reduced padding inside modal */
+  }
+
+  .modal-button {
+    font-size: 10px; /* Smaller font for modal buttons */
+    padding: 4px 8px; /* Smaller padding for buttons */
+  }
+  /* Input field styles */
+input[type="search"] {
+  width: 200px; /* Full width for search input on mobile */
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+}

@@ -1,0 +1,56 @@
+/* src/components/Dashboard.css */
+
+.dashboard-container {
+  display: flex; /* Use flexbox to align sidebar and content */
+}
+
+.dashboard-content {
+  flex: 1; /* Take the remaining space next to the sidebar */
+  padding: 20px; /* Add some padding for aesthetics */
+  background-color: #ffffff; /* Light background color */
+}
+
+.dashboard-header {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.dashboard-row {
+  display: flex; /* Align cards in a row */
+  gap: 20px; /* Space between cards */
+  margin-bottom: 20px;
+}
+
+.dashboard-card {
+  flex: 1; /* Equal width for all cards */
+  background: #fff; /* White background for cards */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Center the text */
+}
+
+.dashboard-icon {
+  font-size: 40px;
+  color: #1890ff; /* Ant Design primary color */
+}
+
+.dashboard-stat-title {
+  font-size: 1.5em;
+  margin: 10px 0;
+}
+
+.dashboard-stat-subtitle {
+  color: #555;
+}
+
+.dashboard-stat-increase {
+  color: green; /* Color for increase percentage */
+}
+
+.asset-document-form {
+  background: #fff; /* White background for form */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

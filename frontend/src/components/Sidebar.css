@@ -1,0 +1,123 @@
+/* Sidebar.css */
+
+.sidebar {
+    height: 100vh; /* Full height */
+    position: fixed; /* Fix the sidebar */
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 80px; /* Sidebar width set to 80px */
+    background-color: #ffffff; /* Light background */
+    overflow-y: auto; /* Allow scrolling if necessary */
+    z-index: 100; /* Keep it on top of other elements */
+    transition: all 0.3s ease; /* Add smooth transitions for width change */
+}
+
+.logo-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff; /* Light gray background for the logo */
+    height: 64px; /* Height for the logo section */
+}
+
+.logo {
+    width: 40px; /* Adjust the logo size */
+    height: auto;
+}
+
+.menu-section .ant-menu-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64px; /* Menu item height */
+    padding: 10px;
+}
+
+.menu-section .ant-menu-item:hover {
+    background-color: #f0f0f0; /* Slightly darker background on hover */
+}
+
+.logout-section {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.logout-icon {
+    color: #000000; /* Black color for logout icon */
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Responsive design */
+
+/* For mobile and small screens */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 60px; /* Reduce sidebar width for smaller screens */
+    }
+
+    .logo {
+        width: 30px; /* Smaller logo */
+    }
+
+    .menu-section .ant-menu-item {
+        height: 56px; /* Reduce menu item height */
+    }
+
+    .logout-icon {
+        font-size: 20px; /* Adjust icon size */
+    }
+}
+
+/* For very small screens like mobile (max 480px) */
+@media screen and (max-width: 480px) {
+    .sidebar {
+        width: 50px; /* Narrower sidebar on mobile */
+    }
+
+    .logo {
+        width: 25px; /* Even smaller logo for mobile */
+    }
+
+    .menu-section .ant-menu-item {
+        height: 50px; /* Further reduce menu item height */
+    }
+
+    .logout-icon {
+        font-size: 18px; /* Adjust icon size for mobile */
+    }
+}
+
+/* Special focus on very small screens (320px and below) */
+@media screen and (max-width: 320px) {
+    .sidebar {
+        width: 45px; /* Even narrower sidebar for very small screens */
+        padding: 5px 0; /* Reduce padding */
+    }
+
+    .logo {
+        width: 20px; /* Smallest logo for very narrow screens */
+        height: auto;
+    }
+
+    .menu-section .ant-menu-item {
+        height: 45px; /* Adjust menu item height for very small screens */
+        padding: 5px; /* Reduce padding around the icons */
+    }
+
+    .ant-menu-item > span {
+        display: none; /* Hide text labels on very small screens */
+    }
+
+    .logout-section {
+        bottom: 10px; /* Adjust positioning */
+    }
+
+    .logout-icon {
+        font-size: 16px; /* Smaller logout icon */
+    }
+}

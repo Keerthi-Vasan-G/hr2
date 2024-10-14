@@ -1,0 +1,81 @@
+/* General container for the calendar and event list */
+.calendar-event-container {
+  display: flex;
+  flex-direction: row; /* Align items side by side */
+  justify-content: space-between; /* Space out the items */
+  height: auto;
+  overflow: hidden;
+}
+.divider{
+  background-color: #ffffff;
+}
+/* Calendar container */
+.calendar-container {
+  width: 75%; /* Adjust the width for the calendar */
+  height: auto;
+}
+
+/* Event list container */
+.event-list-container {
+  width: 35%; /* Adjust the width for the event list */
+  background-color: #ffffff;
+  padding: 10px;
+  border: 1px solid #ffffff; /* Add border for separation */
+  overflow-y: auto;
+  height: auto; /* Adjust height based on content */
+}
+
+/* Header section styling */
+.header {
+  background: #ffffff;
+  padding: 0 24px;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* Event list styling */
+.event-list-title {
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.event-title {
+  font-size: 12px;
+  color: #555;
+}
+
+/* Button and modal adjustments for mobile screens */
+.modal-button {
+  margin-right: 8px;
+}
+
+@media (max-width: 480px) {
+  /* Stack the calendar and event list vertically on small screens */
+  .calendar-event-container {
+    flex-direction: column; /* Stack elements vertically */
+    padding: 10px;
+  }
+
+  /* Adjust calendar and event list containers */
+  .calendar-container,
+  .event-list-container {
+    width: 100%; /* Full width for small screens */
+    margin-right: 0;
+  }
+
+  .event-title {
+    font-size: 10px;
+  }
+
+  .modal-button {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .header-title {
+    font-size: 20px;
+  }
+}
