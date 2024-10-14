@@ -1,136 +1,115 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Checkbox, Upload, message, Modal, Form, Input, Button, Tooltip, Layout, Divider, Typography } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { Upload, Modal, Form, Input, Button, Checkbox, Layout, Divider, Table, Tooltip } from 'antd';
+import { UploadOutlined, EditOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
 import Sidebar from '../../components/Sidebar';
 import './DocumentManagement.css';
 
 const { Header, Content } = Layout;
-const { Title } = Typography;
+
+const initialDocuments = [
+  { label: "Copy of Standard X certificate and mark sheets", key: "doc1" },
+  { label: "Copy of Standard XI Certificate and mark sheets", key: "doc2" },
+  { label: "Copy of Standard XII certificate and mark sheets", key: "doc3" },
+  { label: "Copy of Degree Certificate(s) Graduate and Post Graduate", key: "doc4" },
+  { label: "Copy of Mark Sheets of all Graduate/Post Graduate Programs", key: "doc5" },
+  { label: "Copy of Consolidated Mark Sheet Graduate/Post Graduate Programs", key: "doc6" },
+  { label: "Copy of any other Certifications/Course(s) attended", key: "doc7" },
+  { label: "Copy of Passport/Passport application form", key: "doc8" },
+];
 
 const DocumentManagement = () => {
   const [documents, setDocuments] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [detailModalIsOpen, setDetailModalIsOpen] = useState(false);
-  const [formData, setFormData] = useState({ documentNumber: '', submittedBy: '', submittedTo: '', department: '', files: [] });
-  const [selectedDocument, setSelectedDocument] = useState(null);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [formData, setFormData] = useState({ submittedBy: '', submittedTo: '' });
   const [isEditing, setIsEditing] = useState(false);
+  const [editKey, setEditKey] = useState(null);
 
   useEffect(() => {
     const storedDocuments = JSON.parse(localStorage.getItem('dmsdb')) || [];
     setDocuments(storedDocuments);
   }, []);
 
-  const openReceiveModal = () => {
+  const openReceiveModal = (document = {}) => {
+    setIsEditing(!!document.key);
+    setFormData(document);
+    setEditKey(document.key || null);
     setModalIsOpen(true);
-    setIsEditing(false); // Reset editing state
   };
-  
+
   const closeReceiveModal = () => {
     setModalIsOpen(false);
-    setFormData({ documentNumber: '', submittedBy: '', submittedTo: '', department: '', files: [] });
   };
 
-  const openDetailModal = (document) => {
-    setSelectedDocument(document);
-    setDetailModalIsOpen(true);
+  const handleFileChange = (key, { fileList }) => {
+    const newFileData = fileList.length > 0 ? fileList[0].name : null;
+    setFormData((prev) => ({
+      ...prev,
+      [key]: { ...prev[key], file: newFileData, confirmed: true } // Auto-check the checkbox on file upload
+    }));
   };
 
-  const closeDetailModal = () => {
-    setDetailModalIsOpen(false);
-    setSelectedDocument(null);
+  const handleCheckboxChange = (key, e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: { ...prev[key], confirmed: e.target.checked }
+    }));
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleFileChange = ({ fileList }) => {
-    const files = fileList.map(file => ({ name: file.name, status: 'done' }));
-    setFormData({ ...formData, files });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = () => {
-    let newDocuments = [...documents];
-    
+    let updatedDocuments;
     if (isEditing) {
-      newDocuments = newDocuments.map(doc => 
-        doc.documentNumber === formData.documentNumber ? { ...formData, updatedAt: new Date() } : doc
+      updatedDocuments = documents.map((doc) =>
+        doc.key === editKey ? { ...doc, ...formData, updatedAt: new Date() } : doc
       );
     } else {
-      const existingDocIndex = newDocuments.findIndex(doc => doc.documentNumber === formData.documentNumber);
-
-      if (existingDocIndex !== -1) {
-        newDocuments[existingDocIndex].revision += 1; // Increment revision for existing document
-        newDocuments[existingDocIndex].files = formData.files; // Update files
-      } else {
-        newDocuments.push({ ...formData, revision: 1, status: 'Received', createdAt: new Date(), updatedAt: new Date() });
-      }
+      const newDocument = { ...formData, createdAt: new Date(), updatedAt: new Date(), key: Date.now().toString() };
+      updatedDocuments = [...documents, newDocument];
     }
-
-    setDocuments(newDocuments);
-    localStorage.setItem('dmsdb', JSON.stringify(newDocuments));
+    setDocuments(updatedDocuments);
+    localStorage.setItem('dmsdb', JSON.stringify(updatedDocuments));
     closeReceiveModal();
   };
 
-  const handleEdit = (document) => {
-    setIsEditing(true);
-    setFormData({ ...document });
-    setModalIsOpen(true);
+  const handleDelete = (key) => {
+    const updatedDocuments = documents.filter((doc) => doc.key !== key);
+    setDocuments(updatedDocuments);
+    localStorage.setItem('dmsdb', JSON.stringify(updatedDocuments));
   };
 
-  const handleDelete = (documentNumber) => {
-    const newDocuments = documents.filter(doc => doc.documentNumber !== documentNumber);
-    setDocuments(newDocuments);
-    localStorage.setItem('dmsdb', JSON.stringify(newDocuments));
+  const handleApprove = (key) => {
+    const updatedDocuments = documents.map((doc) => {
+      if (doc.key === key) {
+        return { ...doc, approved: true }; // Add an approval status
+      }
+      return doc;
+    });
+    setDocuments(updatedDocuments);
+    localStorage.setItem('dmsdb', JSON.stringify(updatedDocuments));
   };
 
   const columns = [
     {
-      title: '',
-      dataIndex: 'key',
-      render: (text, record) => (
-        <Checkbox
-          checked={selectedRowKeys.includes(record.documentNumber)}
-          onChange={() => {
-            const newSelectedKeys = selectedRowKeys.includes(record.documentNumber)
-              ? selectedRowKeys.filter(key => key !== record.documentNumber)
-              : [...selectedRowKeys, record.documentNumber];
-            setSelectedRowKeys(newSelectedKeys);
-          }}
-        />
-      ),
-    },
-    {
-      title: 'Document No.',
-      dataIndex: 'documentNumber',
-      render: (text, record) => <a onClick={() => openDetailModal(record)}>{text}</a>,
-    },
-    {
-      title: 'Revision',
-      dataIndex: 'revision',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-    },
-    {
-      title: 'Submitted By',
-      dataIndex: 'submittedBy',
-    },
-    {
-      title: 'Submitted To',
-      dataIndex: 'submittedTo',
-    },
-    {
-      title: 'Department',
-      dataIndex: 'department',
+      title: 'Document',
+      dataIndex: 'label',
     },
     {
       title: 'Files',
       dataIndex: 'files',
-      render: (files) => files.map(file => <div key={file.name}>{file.name}</div>),
+      render: (_, record) =>
+        initialDocuments.map((doc) => (
+          <div key={doc.key}>
+            {formData[doc.key]?.file ? (
+              <span>{formData[doc.key]?.file}</span>
+            ) : (
+              <span>No file uploaded</span>
+            )}
+          </div>
+        )),
     },
     {
       title: 'Created At',
@@ -144,18 +123,32 @@ const DocumentManagement = () => {
     },
     {
       title: 'Actions',
-      render: (text, record) => (
+      render: (_, record) => (
         <>
           <Tooltip title="Edit">
-            <Button type="primary" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+            <Button type="primary" icon={<EditOutlined />} onClick={() => openReceiveModal(record)} />
           </Tooltip>
           <Tooltip title="Delete">
-            <Button type="danger" icon={<DeleteOutlined />} onClick={() => handleDelete(record.documentNumber)} />
+            <Button type="danger" icon={<DeleteOutlined />} onClick={() => handleDelete(record.key)} />
+          </Tooltip>
+          <Tooltip title="Approve">
+            <Button
+              type="primary"
+              icon={<CheckOutlined />}
+              onClick={() => handleApprove(record.key)}
+              disabled={record.approved}
+            >
+              {record.approved ? "Approved" : "Approve"}
+            </Button>
           </Tooltip>
         </>
       ),
     },
   ];
+
+  const isSubmitDisabled = initialDocuments.some(
+    (doc) => !formData[doc.key]?.file || !formData[doc.key]?.confirmed
+  );
 
   return (
     <div style={{ display: 'flex' }} className='main Document-management-page'>
@@ -167,76 +160,79 @@ const DocumentManagement = () => {
         <Divider />
 
         <Content className="document-management-container">
-          <Button type="primary" icon={<PlusOutlined />} onClick={openReceiveModal}>
-            Receive Document
+          <Button type="primary" onClick={() => openReceiveModal()}>
+            Upload Document
           </Button>
-          <input type="search" className="animated" placeholder="Search Document No." style={{ marginLeft: '20px' }} />
 
-          <div className="table-responsive">
-            <Table
-              columns={columns}
-              dataSource={documents.map((doc, index) => ({ ...doc, key: index }))}
-              rowKey="documentNumber" 
-            />
-          </div>
+          <Table
+            columns={columns}
+            dataSource={documents.map((doc) => ({
+              ...doc,
+              key: doc.key,
+            }))}
+            rowKey="key"
+            className="document-table"
+          />
         </Content>
       </Layout>
 
-      {/* Receive Document Modal */}
+      {/* Modal for Upload Document */}
       <Modal title={isEditing ? "Edit Document" : "Receive Document"} visible={modalIsOpen} onCancel={closeReceiveModal} footer={null}>
         <Form onFinish={handleSubmit} layout="vertical">
-          <Form.Item label="Document No." required>
-            <Input name="documentNumber" value={formData.documentNumber} onChange={handleInputChange} disabled={isEditing} />
-          </Form.Item>
+
+          {/* Submitted By and Submitted To Fields */}
           <Form.Item label="Submitted By" required>
-            <Input name="submittedBy" value={formData.submittedBy} onChange={handleInputChange} />
+            <Input
+              name="submittedBy"
+              value={formData.submittedBy}
+              onChange={handleInputChange}
+              placeholder="Enter the submitter's name"
+            />
           </Form.Item>
+
           <Form.Item label="Submitted To" required>
-            <Input name="submittedTo" value={formData.submittedTo} onChange={handleInputChange} />
+            <Input
+              name="submittedTo"
+              value={formData.submittedTo}
+              onChange={handleInputChange}
+              placeholder="Enter the recipient's name"
+            />
           </Form.Item>
-          <Form.Item label="Department" required>
-            <Input name="department" value={formData.department} onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item label="Upload Files">
-            <Upload
-              multiple
-              beforeUpload={() => false} // Prevent automatic upload
-              onChange={handleFileChange}
-              fileList={formData.files}
-            >
-              <Button>Upload Files</Button>
-            </Upload>
-          </Form.Item>
+
+          {/* Document Upload Section */}
+          {initialDocuments.map((doc) => (
+            <Form.Item label={doc.label} key={doc.key}>
+              <div style={{ display: 'flex', alignItems: 'center', flexDirection: "row" }}>
+                <Upload
+                  onChange={(info) => handleFileChange(doc.key, info)}
+                  beforeUpload={() => false}
+                  fileList={
+                    formData[doc.key]?.file
+                      ? [{ name: formData[doc.key].file, status: 'done' }]
+                      : []
+                  }
+                >
+                  <Button icon={<UploadOutlined />}>Upload</Button>
+                </Upload>
+                <Checkbox
+                  onChange={(e) => handleCheckboxChange(doc.key, e)}
+                  checked={formData[doc.key]?.confirmed || false}
+                  style={{ marginLeft: '10px' }}
+                >
+                  Confirm upload
+                </Checkbox>
+              </div>
+            </Form.Item>
+          ))}
+
+          {/* Submit Button */}
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" disabled={isSubmitDisabled}>
               {isEditing ? "Update Document" : "Submit Document"}
-            </Button>
-            <Button style={{ marginLeft: '10px' }} onClick={closeReceiveModal}>
-              Cancel
             </Button>
           </Form.Item>
         </Form>
       </Modal>
-
-      {/* Document Detail Modal */}
-      {selectedDocument && (
-        <Modal title="Document Details" visible={detailModalIsOpen} onCancel={closeDetailModal} footer={null}>
-          <p><strong>Document No:</strong> {selectedDocument.documentNumber}</p>
-          <p><strong>Revision:</strong> {selectedDocument.revision}</p>
-          <p><strong>Status:</strong> {selectedDocument.status}</p>
-          <p><strong>Submitted By:</strong> {selectedDocument.submittedBy}</p>
-          <p><strong>Submitted To:</strong> {selectedDocument.submittedTo}</p>
-          <p><strong>Department:</strong> {selectedDocument.department}</p>
-          <p><strong>Files:</strong></p>
-          <ul>
-            {selectedDocument.files.map(file => (
-              <li key={file.name}>{file.name}</li>
-            ))}
-          </ul>
-          <p><strong>Created At:</strong> {new Date(selectedDocument.createdAt).toLocaleString()}</p>
-          <p><strong>Updated At:</strong> {new Date(selectedDocument.updatedAt).toLocaleString()}</p>
-        </Modal>
-      )}
     </div>
   );
 };

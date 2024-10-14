@@ -1,20 +1,30 @@
 import React from 'react';
 import { Layout, Menu, Tooltip } from 'antd';
-import { HomeOutlined, CalendarOutlined, FileTextOutlined, FormOutlined, LogoutOutlined, InboxOutlined, DollarOutlined } from '@ant-design/icons'; // DollarOutlined for Salary Management
+import { 
+    HomeOutlined, 
+    CalendarOutlined, 
+    FileTextOutlined, 
+    FormOutlined, 
+    LogoutOutlined, 
+    InboxOutlined, 
+    DollarOutlined, 
+    TeamOutlined // Importing icon for Team Management
+} from '@ant-design/icons'; 
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css'; // Import the CSS file for the sidebar styles
 import logo from '../assets/images/logo.png';
 
 const { Sider } = Layout;
 
-// Define the menu items including Leave Application, Asset Management, and Salary Management
+// Define the menu items including Team Management
 const menuItems = [
     { key: '1', text: "Dashboard", icon: <HomeOutlined />, link: "/dashboard" },
     { key: '2', text: "Calendar", icon: <CalendarOutlined />, link: "/calendar" },
     { key: '3', text: "Document", icon: <FileTextOutlined />, link: "/document" },
     { key: '4', text: "Leave Application", icon: <FormOutlined />, link: "/leave" },
     { key: '5', text: "Asset Management", icon: <InboxOutlined />, link: "/assets" }, 
-    { key: '6', text: "Salary Management", icon: <DollarOutlined />, link: "/salary" }, // New Salary Management menu item
+    { key: '6', text: "Salary Management", icon: <DollarOutlined />, link: "/salary" }, 
+    { key: '7', text: "Team Management", icon: <TeamOutlined />, link: "/team" }, // New Team Management menu item
 ];
 
 const Sidebar = () => {

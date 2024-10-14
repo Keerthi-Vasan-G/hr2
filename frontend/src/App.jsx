@@ -14,6 +14,7 @@ import DocumentManagement from './pages/document/DocumentManagement';
 import LeaveApplication from './pages/leave/LeaveApplication';
 import AssetManagement from './pages/assetsmanage/AssetManagement';
 import SalaryManagement from './pages/salary/SalaryManagement';
+import TeamManagement from './pages/team/TeamManagement';
 
 const App = () => {
   return (
@@ -28,6 +29,8 @@ const App = () => {
         <Route path="/leave" element={<LeaveApplication />} />
         <Route path="/assets" element={<AssetManagement />} />
         <Route path="/salary" element={<SalaryManagement />} />
+        <Route path="/team" element={<TeamManagement />} />
+
       </Routes>
       <ToastContainer position="top-center" autoClose={3000} />
     </Router>

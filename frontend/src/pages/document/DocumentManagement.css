@@ -1,7 +1,6 @@
 /* General container styling */
 .document-management-container {
   max-width: 100vw; /* Full width for mobile responsiveness */
-  margin: 0 auto; /* Center the container */
   padding: 20px;
   background-color: #ffffff; /* Light background color */
   border-radius: 8px; /* Rounded corners */

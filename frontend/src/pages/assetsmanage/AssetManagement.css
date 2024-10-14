@@ -1,6 +1,5 @@
 /* General page padding for larger screens */
 .asset-management-page {
-  padding: 20px;
   margin-left: 80px; /* Adjust based on sidebar width */
 }
 
