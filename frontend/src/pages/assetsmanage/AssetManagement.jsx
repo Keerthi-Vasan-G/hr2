@@ -134,9 +134,10 @@ const AssetManagement = () => {
       key: 'name',
     },
     {
-      title: 'Type',
+      title: 'Types',
       dataIndex: 'type',
       key: 'type',
+      render: (types) => types.map((type, index) => <Tag key={index}>{type}</Tag>), // Show multiple types as tags
     },
     {
       title: 'Condition',
@@ -241,10 +242,11 @@ const AssetManagement = () => {
             <Col xs={24} md={12}>
               <Form.Item
                 name="type"
-                label="Asset Type"
-                rules={[{ required: true, message: 'Please select the asset type!' }]}
+                label="Asset Types"
+                rules={[{ required: true, message: 'Please select the asset types!' }]}
               >
-                <Select>
+                {/* Enable multiple selection for asset types */}
+                <Select mode="multiple" placeholder="Select Asset Types">
                   <Option value="Laptop">Laptop</Option>
                   <Option value="Monitor">Monitor</Option>
                   <Option value="Keyboard">Keyboard</Option>

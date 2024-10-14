@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, Modal, Form, Input, Button, Checkbox, Layout, Divider, Table, Tooltip } from 'antd';
-import { UploadOutlined, EditOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
+import { Upload, Modal, Form, Button, Checkbox, Layout, Divider, Table, Tooltip, Input, message } from 'antd';
+import { UploadOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import Sidebar from '../../components/Sidebar';
 import './DocumentManagement.css';
 
@@ -19,15 +19,39 @@ const initialDocuments = [
 
 const DocumentManagement = () => {
   const [documents, setDocuments] = useState([]);
+  const [filteredDocuments, setFilteredDocuments] = useState([]);
+  const [searchText, setSearchText] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [formData, setFormData] = useState({ submittedBy: '', submittedTo: '' });
+  const [formData, setFormData] = useState({ employeeName: '', submittedBy: '', submittedTo: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [editKey, setEditKey] = useState(null);
 
+  // Load documents from localStorage on first load
   useEffect(() => {
     const storedDocuments = JSON.parse(localStorage.getItem('dmsdb')) || [];
     setDocuments(storedDocuments);
+    setFilteredDocuments(storedDocuments);
   }, []);
+
+  // Save documents to localStorage whenever the documents state is updated
+  useEffect(() => {
+    if (documents.length > 0) {
+      localStorage.setItem('dmsdb', JSON.stringify(documents));
+    }
+  }, [documents]);
+
+  // Handle search input change and filter documents
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchText(value);
+    const filtered = documents.filter((doc) =>
+      initialDocuments.some((d) =>
+        d.label.toLowerCase().includes(value) ||
+        (formData[d.key]?.file || '').toLowerCase().includes(value)
+      )
+    );
+    setFilteredDocuments(filtered);
+  };
 
   const openReceiveModal = (document = {}) => {
     setIsEditing(!!document.key);
@@ -48,18 +72,6 @@ const DocumentManagement = () => {
     }));
   };
 
-  const handleCheckboxChange = (key, e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [key]: { ...prev[key], confirmed: e.target.checked }
-    }));
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
   const handleSubmit = () => {
     let updatedDocuments;
     if (isEditing) {
@@ -71,31 +83,27 @@ const DocumentManagement = () => {
       updatedDocuments = [...documents, newDocument];
     }
     setDocuments(updatedDocuments);
-    localStorage.setItem('dmsdb', JSON.stringify(updatedDocuments));
+    setFilteredDocuments(updatedDocuments); // Update filtered documents
     closeReceiveModal();
   };
 
   const handleDelete = (key) => {
     const updatedDocuments = documents.filter((doc) => doc.key !== key);
     setDocuments(updatedDocuments);
-    localStorage.setItem('dmsdb', JSON.stringify(updatedDocuments));
-  };
-
-  const handleApprove = (key) => {
-    const updatedDocuments = documents.map((doc) => {
-      if (doc.key === key) {
-        return { ...doc, approved: true }; // Add an approval status
-      }
-      return doc;
-    });
-    setDocuments(updatedDocuments);
-    localStorage.setItem('dmsdb', JSON.stringify(updatedDocuments));
+    setFilteredDocuments(updatedDocuments); // Update filtered documents
+    message.success('Document deleted successfully');
   };
 
   const columns = [
     {
       title: 'Document',
       dataIndex: 'label',
+      render: (_, record) =>
+        initialDocuments.map((doc) => (
+          <div key={doc.key}>
+            {doc.label}
+          </div>
+        )),
     },
     {
       title: 'Files',
@@ -110,6 +118,14 @@ const DocumentManagement = () => {
             )}
           </div>
         )),
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      render: (_, record) => {
+        const allFilesUploaded = initialDocuments.every((doc) => formData[doc.key]?.file);
+        return allFilesUploaded ? 'Completed' : 'Pending';
+      },
     },
     {
       title: 'Created At',
@@ -131,16 +147,6 @@ const DocumentManagement = () => {
           <Tooltip title="Delete">
             <Button type="danger" icon={<DeleteOutlined />} onClick={() => handleDelete(record.key)} />
           </Tooltip>
-          <Tooltip title="Approve">
-            <Button
-              type="primary"
-              icon={<CheckOutlined />}
-              onClick={() => handleApprove(record.key)}
-              disabled={record.approved}
-            >
-              {record.approved ? "Approved" : "Approve"}
-            </Button>
-          </Tooltip>
         </>
       ),
     },
@@ -160,13 +166,22 @@ const DocumentManagement = () => {
         <Divider />
 
         <Content className="document-management-container">
-          <Button type="primary" onClick={() => openReceiveModal()}>
-            Upload Document
-          </Button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <Button type="primary" onClick={() => openReceiveModal()}>
+              Upload Document
+            </Button>
+            <Input
+              placeholder="Search Documents"
+              prefix={<SearchOutlined />}
+              value={searchText}
+              onChange={handleSearch}
+              style={{ width: '300px' }}
+            />
+          </div>
 
           <Table
             columns={columns}
-            dataSource={documents.map((doc) => ({
+            dataSource={filteredDocuments.map((doc) => ({
               ...doc,
               key: doc.key,
             }))}
@@ -179,25 +194,6 @@ const DocumentManagement = () => {
       {/* Modal for Upload Document */}
       <Modal title={isEditing ? "Edit Document" : "Receive Document"} visible={modalIsOpen} onCancel={closeReceiveModal} footer={null}>
         <Form onFinish={handleSubmit} layout="vertical">
-
-          {/* Submitted By and Submitted To Fields */}
-          <Form.Item label="Submitted By" required>
-            <Input
-              name="submittedBy"
-              value={formData.submittedBy}
-              onChange={handleInputChange}
-              placeholder="Enter the submitter's name"
-            />
-          </Form.Item>
-
-          <Form.Item label="Submitted To" required>
-            <Input
-              name="submittedTo"
-              value={formData.submittedTo}
-              onChange={handleInputChange}
-              placeholder="Enter the recipient's name"
-            />
-          </Form.Item>
 
           {/* Document Upload Section */}
           {initialDocuments.map((doc) => (
@@ -215,9 +211,9 @@ const DocumentManagement = () => {
                   <Button icon={<UploadOutlined />}>Upload</Button>
                 </Upload>
                 <Checkbox
-                  onChange={(e) => handleCheckboxChange(doc.key, e)}
                   checked={formData[doc.key]?.confirmed || false}
                   style={{ marginLeft: '10px' }}
+                  disabled // Disable checkbox to make it auto-check on file upload
                 >
                   Confirm upload
                 </Checkbox>
